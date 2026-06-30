@@ -14,7 +14,7 @@ export const pagesContent = {
       title: ['A thoughtful home for', 'stories, visuals, and discovery.'],
       description: 'Explore fresh articles, image-led posts, and discoverable content across the platform through a calmer and clearer browsing experience.',
       primaryCta: { label: 'Read latest stories', href: '/article' },
-      secondaryCta: { label: 'Explore visuals', href: '/image' },
+      secondaryCta: { label: 'Browse listings', href: '/listing' },
       searchPlaceholder: 'Search stories, visuals, listings, and more',
       focusLabel: 'Focus',
       featureCardBadge: 'latest cover rotation',
@@ -37,7 +37,7 @@ export const pagesContent = {
         'Lightweight interactions that keep the experience fast and readable.',
       ],
       primaryLink: { label: 'Browse articles', href: '/article' },
-      secondaryLink: { label: 'See visuals', href: '/image' },
+      secondaryLink: { label: 'See listings', href: '/listing' },
     },
     cta: {
       badge: 'Start exploring',
