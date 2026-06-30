@@ -18,11 +18,11 @@ export function EmptyState({
   className,
 }: EmptyStateProps) {
   return (
-    <section className={cn('rounded-[2rem] border border-current/10 bg-current/[0.03] p-8 text-center', className)}>
-      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-current/10">
+    <section className={cn('rounded-[32px] border border-current/10 bg-current/[0.03] p-8 text-center backdrop-blur-sm', className)}>
+      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-current/10">
         <SearchX className="h-6 w-6" />
       </div>
-      <h2 className="mt-5 text-2xl font-semibold tracking-[-0.03em]">{title}</h2>
+      <h2 className="editable-display mt-5 text-3xl font-semibold tracking-[-0.04em]">{title}</h2>
       <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-current/65">{description}</p>
       <Link href={actionHref} className="mt-6 inline-flex items-center gap-2 rounded-full border border-current/15 px-5 py-3 text-sm font-semibold transition hover:bg-current hover:text-background">
         {actionLabel}
@@ -37,7 +37,7 @@ export function TaskEmptyState({ taskLabel = 'posts', className }: { taskLabel?:
     <EmptyState
       className={className}
       title={`No ${taskLabel} available yet`}
-      description={`Published ${taskLabel} from the master panel will appear here automatically. The page layout stays ready even when the feed is empty.`}
+      description={`Published ${taskLabel} will appear here automatically. The page stays polished even when the feed is empty.`}
       actionLabel="Explore the site"
       actionHref="/"
     />
