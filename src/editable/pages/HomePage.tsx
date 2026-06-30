@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { SchemaJsonLd } from '@/components/seo/schema-jsonld'
 import { SITE_CONFIG, type TaskKey } from '@/lib/site-config'
 import { buildPageMetadata } from '@/lib/seo'
-import { fetchHomeTaskFeed, fetchHomeTimeSections, type HomeTimeSection } from '@/lib/task-data'
+import { fetchHomeTaskFeed, fetchHomeTimeSections, getPostTaskKey, type HomeTimeSection } from '@/lib/task-data'
 import { pagesContent } from '@/editable/content/pages.content'
 import type { SitePost } from '@/lib/site-connector'
 import { EditableHomeCta, EditableHomeHero, EditableMagazineSplit, EditableStoryRail, EditableTimeCollections } from '@/editable/sections/HomeSections'
@@ -23,16 +23,22 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 type TaskFeedItem = { task: (typeof SITE_CONFIG.tasks)[number]; posts: SitePost[] }
+const hiddenTasks = new Set<TaskKey>(['image', 'profile'])
 
 function uniquePosts(posts: SitePost[]) {
   return Array.from(new Map(posts.map((post) => [post.slug || post.id || post.title, post])).values())
 }
 
 export default async function HomePage() {
-  const primaryTask = (SITE_CONFIG.tasks.find((task) => task.enabled)?.key || 'article') as TaskKey
+  const primaryTask = (SITE_CONFIG.tasks.find((task) => task.enabled && !hiddenTasks.has(task.key as TaskKey))?.key || 'article') as TaskKey
   const primaryRoute = SITE_CONFIG.taskViews[primaryTask] || `/${primaryTask}`
   const taskFeed: TaskFeedItem[] = await fetchHomeTaskFeed(12, { timeoutMs: 2500 })
-  const primaryPosts = uniquePosts(taskFeed.find(({ task }) => task.key === primaryTask)?.posts || taskFeed.flatMap(({ posts }) => posts)).slice(0, 24)
+  const primaryPosts = uniquePosts(
+    (taskFeed.find(({ task }) => task.key === primaryTask)?.posts || taskFeed.flatMap(({ posts }) => posts)).filter((post) => {
+      const task = getPostTaskKey(post)
+      return !task || !hiddenTasks.has(task as TaskKey)
+    })
+  ).slice(0, 24)
   const timeSections: HomeTimeSection[] = await fetchHomeTimeSections(primaryTask, { limit: 8, timeoutMs: 2500 })
   const baseUrl = SITE_CONFIG.baseUrl.replace(/\/$/, '')
 
